@@ -1,0 +1,36 @@
+dependencies {
+}
+
+publishing {
+    publications {
+        mavenJar(MavenPublication) {
+        	groupId group
+        	artifactId "${moduleName}"
+            artifact sourcesJar
+            version moduleVersion
+            pom.withXml {
+            }
+        }
+        publishing.publications.create("${appName}", MavenPublication) {
+            groupId group
+            artifactId appName
+            version moduleVersion
+            artifact  jar
+            pom.withXml {
+            }
+        }
+    }
+    repositories {
+        maven {
+            if(moduleVersion.endsWith('-SNAPSHOT')) {
+                url publishSnapShotsURL
+            } else {
+                url publishReleaseURL
+            }
+            credentials {
+                username = publishUserName
+                password = publishUserPassword
+            }
+        }
+    }
+}
